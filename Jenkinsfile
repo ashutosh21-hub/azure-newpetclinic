@@ -20,7 +20,7 @@ pipeline {
         APP_NAME = 'spring-petclinic'
         BUILD_NUMBER = "${BUILD_NUMBER}"
         DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
-        JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
+        JAVA_HOME = '/usr/lib/jvm/java-11-openjdk-amd64/'
         MAVEN_HOME = '/usr/share/maven'
         PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
     }
