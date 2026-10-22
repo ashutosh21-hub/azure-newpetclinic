@@ -1,10 +1,10 @@
 pipeline {
     agent any
     
-    tools {
+    /*tools {
         maven "maven"
         jdk "JDK"
-    }
+    }*/
     
     parameters {
         string(name: 'GIT_REPO', defaultValue: 'https://github.com/spring-projects/spring-petclinic.git', description: 'GitHub Repository URL')
