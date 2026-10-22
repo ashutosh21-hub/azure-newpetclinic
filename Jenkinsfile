@@ -1,11 +1,6 @@
 pipeline {
     agent any
     
-    /*tools {
-        maven "maven"
-        jdk "JDK"
-    }*/
-    
     parameters {
         string(name: 'GIT_REPO', defaultValue: 'https://github.com/spring-projects/spring-petclinic.git', description: 'GitHub Repository URL')
         string(name: 'GIT_BRANCH', defaultValue: 'main', description: 'GitHub Branch')
@@ -22,8 +17,7 @@ pipeline {
         BUILD_NUMBER = "${BUILD_NUMBER}"
         DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
         JAVA_HOME = '/opt/java/openjdk'
-        MAVEN_HOME = '/usr/share/maven'
-        PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
+        PATH = "${JAVA_HOME}/bin:${PATH}"
     }
     
     options {
@@ -62,8 +56,8 @@ pipeline {
                             echo "Checking Java version..."
                             java -version
                             
-                            echo "Checking Maven version..."
-                            mvn -version
+                            echo "Checking Maven wrapper..."
+                            ./mvnw -version
                             
                             echo "Checking Docker..."
                             docker --version
@@ -86,7 +80,7 @@ pipeline {
                     try {
                         sh '''
                             echo "Starting Maven build..."
-                            mvn clean package -DskipTests=true -U \
+                            ./mvnw clean package -DskipTests=true -U \
                                 -Dmaven.test.skip=true \
                                 -Dorg.slf4j.simpleLogger.defaultLogLevel=info
                             
@@ -114,7 +108,7 @@ pipeline {
                     try {
                         sh '''
                             echo "Running unit tests..."
-                            mvn test -Dorg.slf4j.simpleLogger.defaultLogLevel=info
+                            ./mvnw test -Dorg.slf4j.simpleLogger.defaultLogLevel=info
                             
                             echo "✓ Unit tests completed"
                         '''
@@ -134,7 +128,7 @@ pipeline {
                         withSonarQubeEnv('SonarQube') {
                             sh '''
                                 echo "Starting SonarQube analysis..."
-                                mvn sonar:sonar \
+                                ./mvnw sonar:sonar \
                                     -Dsonar.projectKey=${APP_NAME} \
                                     -Dsonar.projectName=${APP_NAME} \
                                     -Dsonar.host.url=${SONAR_HOST_URL} \
