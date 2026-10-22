@@ -3,7 +3,7 @@ pipeline {
     
     tools {
         maven "maven"
-        JDK "/usr/lib/jvm/java-11-openjdk-amd64/"
+        jdk "JDK"
     }
     
     parameters {
