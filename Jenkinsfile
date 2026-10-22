@@ -84,7 +84,7 @@ pipeline {
                                 -Dmaven.test.skip=true \
                                 -Dorg.slf4j.simpleLogger.defaultLogLevel=info
                             
-                            if [ -f "target/${APP_NAME}*.jar" ]; then
+                            if ls target/*.jar 1> /dev/null 2>&1; then
                                 echo "✓ Build successful - JAR file created"
                                 ls -lh target/*.jar
                             else
