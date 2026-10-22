@@ -1,7 +1,7 @@
-# Multi-stage Docker build for Spring PetClinic
+# Multi-stage Docker build for Spring PetClinic (Java 21)
 
 # Stage 1: Build
-FROM maven:3.8.6-openjdk-11 AS builder
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
 
 WORKDIR /build
 
@@ -15,18 +15,17 @@ COPY src ./src
 RUN mvn clean package -DskipTests -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
 
 # Stage 2: Runtime
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:21-jre-alpine
 
 LABEL maintainer="DevOps Team"
 LABEL description="Spring PetClinic Application"
 LABEL version="1.0"
 
-# Create non-root user
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+# Create non-root user and group
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Install curl for health checks
-RUN apt-get update && apt-get install -y --no-install-recommends curl && \
-    rm -rf /var/lib/apt/lists/*
+# Install curl for health checks (Alpine version)
+RUN apk add --no-cache curl
 
 # Set working directory
 WORKDIR /app
@@ -35,7 +34,7 @@ WORKDIR /app
 COPY --from=builder /build/target/*.jar ./app.jar
 
 # Change ownership
-RUN chown -R appuser:appuser /app
+RUN chown -R appuser:appgroup /app
 
 # Switch to non-root user
 USER appuser
@@ -43,9 +42,9 @@ USER appuser
 # Expose port
 EXPOSE 8080
 
-# Health check
+# Health check (matches Spring Boot Actuator endpoint)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8080/manage/health/liveness || exit 1
+    CMD curl -f http://localhost:8080/actuator/health/liveness || exit 1
 
 # JVM options
 ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+ParallelRefProcEnabled -Xms256m -Xmx512m"
