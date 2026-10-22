@@ -8,12 +8,12 @@ pipeline {
     parameters {
         string(name: 'GIT_REPO', defaultValue: 'https://github.com/spring-projects/spring-petclinic.git', description: 'GitHub Repository URL')
         string(name: 'GIT_BRANCH', defaultValue: 'main', description: 'GitHub Branch')
-        string(name: 'REGISTRY_URL', defaultValue: 'your-registry.azurecr.io', description: 'Azure Container Registry URL')
-        string(name: 'REGISTRY_USERNAME', defaultValue: '', description: 'ACR Username')
+        string(name: 'REGISTRY_URL', defaultValue: 'petclinicacr21.azurecr.io', description: 'Azure Container Registry URL')
+        string(name: 'REGISTRY_USERNAME', defaultValue: 'petclinicacr21', description: 'ACR Username')
         password(name: 'REGISTRY_PASSWORD', defaultValue: '', description: 'ACR Password')
-        string(name: 'SONAR_HOST_URL', defaultValue: 'http://sonarqube:9000', description: 'SonarQube Server URL')
-        string(name: 'AKS_RESOURCE_GROUP', defaultValue: 'your-rg', description: 'AKS Resource Group')
-        string(name: 'AKS_CLUSTER_NAME', defaultValue: 'your-aks', description: 'AKS Cluster Name')
+        string(name: 'SONAR_HOST_URL', defaultValue: 'http://20.51.224.255:9000', description: 'SonarQube Server URL')
+        string(name: 'AKS_RESOURCE_GROUP', defaultValue: 'petclinic-rg', description: 'AKS Resource Group')
+        string(name: 'AKS_CLUSTER_NAME', defaultValue: 'petclinic-aks', description: 'AKS Cluster Name')
     }
     
     environment {
