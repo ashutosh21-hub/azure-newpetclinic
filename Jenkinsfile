@@ -128,7 +128,7 @@ pipeline {
                         withSonarQubeEnv('SonarQube') {
                             sh '''
                                 echo "Starting SonarQube analysis..."
-                                ./mvnw sonar:sonar \
+                                ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
                                     -Dsonar.projectKey=${APP_NAME} \
                                     -Dsonar.projectName=${APP_NAME} \
                                     -Dsonar.host.url=${SONAR_HOST_URL} \
