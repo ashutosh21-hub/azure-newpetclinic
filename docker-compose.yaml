@@ -60,6 +60,9 @@ services:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - jenkins_data:/var/jenkins_data
+    # Grants the Jenkins container permissions to access the host docker.sock socket
+    group_add:
+      - "999"
     depends_on:
       sonarqube:
         condition: service_healthy
